@@ -12,7 +12,11 @@ def get_all_device_records(device_id:int):
     with sqlite3.connect("database.db") as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM data_records WHERE id = ?", (device_id,))
-        result = cursor.fetchall()
+        
+        result = []
+        for entry in cursor.fetchall():
+            py_dict = {'datetime':entry[1],'audio':entry[2],'motion':entry[3]}
+            result.append(py_dict)
         cursor.close()
         return result
     

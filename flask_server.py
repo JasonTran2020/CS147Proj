@@ -1,5 +1,7 @@
 from flask import Flask
-from flask import request, render_template, json
+from flask import request, render_template, json, jsonify
+
+from sqllite_client import get_all_device_records,insert_recording
 
 app = Flask(__name__)
 
@@ -17,17 +19,17 @@ def hello():
 def set_stat():
     if request.method == 'POST':
         data_json = request.json
+        audio, motion, id = data_json.get('audio'), data_json.get('motion'),data_json.get('id')
         print("Audio data is:" + data_json.get('audio'))
         print("Motion data is:" + data_json.get('motion'))
+        print("id is:" + data_json.get('id'))
         print(data_json)
-
-    print(request.args.get("temp"))
-    print(request.args.get("humidity"))
-    global cur_temp, cur_humidity
-    cur_temp = str(request.args.get('temp'))
-    cur_humidity = str(request.args.get('humidity'))
+        insert_recording(id,audio,motion)
+        
 
 
 @app.route("/get")
 def get_stat():
-    return f"Current temp: {cur_temp}\n Current humidity: {cur_humidity}"
+    id = int(request.args.get("id"))
+    record_list = get_all_device_records(id)
+    return jsonify(record_list)

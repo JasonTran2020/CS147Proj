@@ -1,6 +1,6 @@
 import sqlite3
 import datetime
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 def insert_recording(device_id:int, audio:int, motion:int):
     """Assume that the data has already been processed into the form that is supposed to be saved"""
@@ -52,4 +52,4 @@ def initialize_tables():
 if __name__ == '__main__':
     initialize_tables()
     insert_recording(1,2,3)
-    get_all_device_records(1)
+    print(get_all_device_records(1))

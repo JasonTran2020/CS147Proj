@@ -19,6 +19,8 @@ function onSuccess(jsonData){
         $schema: 'https://vega.github.io/schema/vega-lite/v5.json',
         description: 'ROOM NAME (DATE)',
         mark: 'bar',
+        width: 700,
+        title: 'hi',
         data: {
             values: jsonData, 
             "format": {
@@ -30,24 +32,30 @@ function onSuccess(jsonData){
             {fold: ["motion", "audio"]}
         ],
         encoding: {
-          x: {field: 'datetime', 
-              timeUnit: "hoursminutes",
-              type: 'ordinal'},
-          y: {aggregate: "sum", 
-              type: 'quantitative',
-              field: 'value',
-              title: 'bruh'
-          }
+            x: {field: 'datetime',
+                timeUnit: {unit:"hoursminutes",step:30},
+                type: 'temporal',
+                axis: {tickCount:48},
+                scale: {
+                    domain: [{hours: 0, minutes:0}, {hours: 23, minutes:59}]
+                }
+            },
+            y: {aggregate: "sum", 
+                type: 'quantitative',
+                field: 'value',
+                title: 'Motion/Audio Levels',
+            }, 
+            color: {
+                field: "key",
+                type: "nominal",
+                scale: {
+                    domain: ["motion", "audio"]
+                },
+                
+            title: "Input Type"
+            }
         },
-        color: {
-          field: "key",
-          type: "nominal",
-          scale: {
-            domain: ["motion", "audio"],
-            range: ["#e7ba52", "#c7c7c7"]
-          },
-          title: "Weather type"
-        }
+        
       };
 
     vegaEmbed('#vis', yourVlSpec);

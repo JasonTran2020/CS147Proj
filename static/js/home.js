@@ -61,6 +61,24 @@ function onSuccess(jsonData){
     vegaEmbed('#vis', yourVlSpec);
 }
 
+function setOptions(device_list){
+    let selection_element = $('#deviceid')
+    for (let idx in device_list){
+        entry = device_list[idx]
+        console.log(entry)
+        selection_element.append("<option value="+entry['id']+">"+entry['devicename']+"</option>")
+    }
+    let date_input_element = $('#rdate')
+    // Feel like theres a better way to get a date like 2020-12-22
+    if (search_params.has("rdate")){
+        date_input_element.val(search_params.get("rdate"))
+    }
+    else{
+        date_input_element.val(new Date().toISOString().replace(/T.*/,'').split('-').join('-'))
+    }
+
+}
+
 let url = window.location.href
 let index = url.indexOf("?")
 let parameters = ""
@@ -68,7 +86,15 @@ let parameters = ""
 if (index!=-1){
     parameters = url.slice(index)
 }
-console.log("bruh")
+let search_params = new URLSearchParams(parameters)
+
+jQuery.ajax({
+    dataType: "json",
+    method: "GET",
+    url: "get_devices" ,
+    success:(resultData) => setOptions(resultData)
+})
+
 jQuery.ajax({
     dataType: "json",
     method: "GET",

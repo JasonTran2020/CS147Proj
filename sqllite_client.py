@@ -70,7 +70,7 @@ if __name__ == '__main__':
     print(get_all_devices())
     user_input = input("Add a device? (y/n)")
     if user_input == 'y':
-        id = id(input('Give an integer id'))
+        id = int(input('Give an integer id'))
         name = input('Give a human readable name to the device')
         add_device(id,name)
         print(get_all_devices())

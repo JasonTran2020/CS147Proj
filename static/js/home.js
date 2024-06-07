@@ -87,6 +87,7 @@ if (index!=-1){
 }
 //Get timezone offset of user
 let tzoffset = new Date().getTimezoneOffset()
+console.log(tzoffset)
 if (parameters.length == 0){
     parameters = "?tzoffset="+tzoffset
 }

@@ -48,7 +48,7 @@ def get_stat():
             if offset < 10:
                 offset = "0"+str(offset)
             print(offset)
-            date = datetime.datetime.strptime(request.args.get("rdate") + " 23:59:59+"+offset+":00", "%Y-%m-%d %H:%M:%S%z")
+            date = datetime.datetime.strptime(request.args.get("rdate") + " 23:59:59-"+offset+":00", "%Y-%m-%d %H:%M:%S%z")
     record_list = get_all_within_day(id,date)
     return jsonify(record_list)
 

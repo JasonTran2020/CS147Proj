@@ -40,7 +40,15 @@ def get_stat():
     if (request.args.get("rdate") is None):
         date = datetime.datetime.now(tz=datetime.timezone.utc)
     else:
-        date = datetime.datetime.strptime(request.args.get("rdate") +" 00:00:00+00:00","%Y-%m-%d %H:%M:%S%z")
+        offset = request.args.get("tzoffset")
+        if offset is None:
+            date = datetime.datetime.strptime(request.args.get("rdate") +" 23:59:59+00:00","%Y-%m-%d %H:%M:%S%z")
+        else:
+            offset = int(offset)//60
+            if offset < 10:
+                offset = "0"+str(offset)
+            print(offset)
+            date = datetime.datetime.strptime(request.args.get("rdate") + " 23:59:59+"+offset+":00", "%Y-%m-%d %H:%M:%S%z")
     record_list = get_all_within_day(id,date)
     return jsonify(record_list)
 

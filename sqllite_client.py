@@ -11,6 +11,7 @@ def insert_recording(device_id:int, audio:int, motion:int):
         cursor.close()
 
 def get_all_device_records(device_id:int):
+    """Deprecated"""
     with sqlite3.connect("database.db") as connection:
         cursor = connection.cursor()
         cursor.execute("SELECT * FROM data_records WHERE id = ?", (device_id,))
@@ -36,6 +37,8 @@ def get_all_within_day(device_id:int, date:datetime):
             if startConsider <= entryDate <= date:
                 py_dict = {'datetime':entry[1],'audio':entry[2],'motion':entry[3]}
                 result.append(py_dict)
+        cursor.execute("SELECT * FROM devices WHERE id = ?", (device_id,))
+        result = {"name": cursor.fetchone(), "date" : date, "data":result}
         cursor.close()
         return result
 def get_all_devices():
@@ -68,6 +71,8 @@ if __name__ == '__main__':
     # You must add a device and name to the devices table before inserting records
     # Or not apparently. sqllite does not respect foreign keys for backwards compatibility lmao
     print(get_all_devices())
+    
+    print(get_all_within_day(1,datetime.datetime.now(tz=datetime.timezone.utc)))
     user_input = input("Add a device? (y/n)")
     if user_input == 'y':
         id = int(input('Give an integer id'))

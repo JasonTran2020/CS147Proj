@@ -20,9 +20,9 @@ function onSuccess(jsonData){
         description: 'ROOM NAME (DATE)',
         mark: 'bar',
         width: 700,
-        title: 'hi',
+        title: jsonData["name"]+" "+jsonData["date"],
         data: {
-            values: jsonData, 
+            values: jsonData["data"], 
             "format": {
             "parse": {"date": "utc:'%d %b %Y %H:%M:%S'"}
             }
@@ -82,9 +82,16 @@ function setOptions(device_list){
 let url = window.location.href
 let index = url.indexOf("?")
 let parameters = ""
-
 if (index!=-1){
     parameters = url.slice(index)
+}
+//Get timezone offset of user
+let tzoffset = new Date().getTimezoneOffset()
+if (parameters.length == 0){
+    parameters = "?tzoffset="+tzoffset
+}
+else{
+    parameters += "&tzoffset="+tzoffset
 }
 let search_params = new URLSearchParams(parameters)
 
